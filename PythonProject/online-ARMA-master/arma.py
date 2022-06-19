@@ -21,7 +21,7 @@ def arma_ons(X, m, k, q):
     """
     arma online newton step
     """
-    D = np.sqrt(2*(m+k))  # sqrt返回平方根
+    D = np.sqrt(2*(m+k))  # sqrt返回平方根 输出2(m+k)的平方根  直径
     G = 2*np.sqrt(m+k)*D    # 定义 G
     rate = 0.5*min(1./(m+k), 4*G*D)  # min返回最小值，定义一个学习率吧应该是
     epsilon = 1./(rate**2 * D**2)   # 只是简单的除法
@@ -43,17 +43,17 @@ def arma_ons(X, m, k, q):
     for t in range(T): # T是输出的矩阵的行数，对这些行进行操作
         # predict
         X_t = 0  # 定义一个参数
-        for i in range(m+k):  # (m+k)维的系数vector
+        for i in range(m+k):  # (m+k)维的系数vector range(m+k) 创建一个整数列表
             if t-i-1 < 0:
                 break
             X_t += L[i]*X[t-i-1]  #
-        X_p[t] = X_t
+        X_p[t] = X_t    # X_p[t]应该是一个记录预测值的一个数组
 
         # loss
-        loss[t] = (X[t]-X_t)**2
+        loss[t] = (X[t]-X_t)**2  # 损失函数
 
         # update
-        nabla = np.zeros((m+k, 1))
+        nabla = np.zeros((m+k, 1))   # 返回一个给定形状和类型的用0填充的矩阵，比如这里是m+k行，1列的矩阵，也就是一个列向量
         for i in range(m+k):
             x = X[t-i-1] if t-i-1 >= 0 else 0
             nabla[i, 0] = -2*(X[t]-X_t)*x
@@ -120,10 +120,10 @@ def average(datagen, N, arma, n):
 if __name__ == '__main__':
     n = 10000
     iters = 2
-    t = range(n)
+    t = range(n)  # 创建一个从0到n的整数序列
     X = data.gen_dataset1(n)
 
-    plt.subplot(221)
+    plt.subplot(221)  # subplot用于直接指定划分方式和位置进行绘图，将整个图像窗口分为2行2列，当前位置为1
     loss = average(data.gen_dataset1, n, arma_ons, iters)
     e = gen_errors(loss)
     plt.plot(t, e, label="ARMA-ONS")
@@ -132,29 +132,29 @@ if __name__ == '__main__':
     e = gen_errors(loss)
     plt.plot(t, e, label="ARMA-OGD")
     plt.legend()
-    plt.title("Sanity check")
+    plt.title("Sanity check")   # 完整性检查
 
-    plt.subplot(222)
+    plt.subplot(222)    # 将整个图像窗口分为2行2列，当前位置为2
     loss = average(data.gen_dataset2, n, arma_ons, iters)
     e = gen_errors(loss)
-    plt.plot(t, e, label="ARMA-ONS")
+    plt.plot(t, e, label="ARMA-ONS")  # 以t为x轴数据，e为y轴数据，图形内容的标签文本为ARMA-ONS
 
     loss = average(data.gen_dataset2, n, arma_ogd, iters)
     e = gen_errors(loss)
     plt.plot(t, e, label="ARMA-OGD")
     plt.legend()
-    plt.title("Slowly changing coefficients")
+    plt.title("Slowly changing coefficients")   # 缓慢变化系数
 
-    plt.subplot(223)
-    loss = average(data.gen_dataset3, n, arma_ons, iters)
-    e = gen_errors(loss)
-    plt.plot(t, e, label="ARMA-ONS")
-
-    loss = average(data.gen_dataset3, n, arma_ogd, iters)
-    e = gen_errors(loss)
-    plt.plot(t, e, label="ARMA-OGD")
-    plt.legend()
-    plt.title("Abrupt change")
+    # plt.subplot(223)
+    # loss = average(data.gen_dataset3, n, arma_ons, iters)
+    # e = gen_errors(loss)
+    # plt.plot(t, e, label="ARMA-ONS")
+    #
+    # loss = average(data.gen_dataset3, n, arma_ogd, iters)
+    # e = gen_errors(loss)
+    # plt.plot(t, e, label="ARMA-OGD")
+    # plt.legend()
+    # plt.title("Abrupt change")  # 急剧变化
 
     plt.subplot(224)
     loss = average(data.gen_dataset4, n, arma_ons, iters)
@@ -165,7 +165,7 @@ if __name__ == '__main__':
     # e = gen_errors(loss)
     # plt.plot(t, e, label="ARMA-OGD")
     plt.legend()
-    plt.title("Correlated noise")
+    plt.title("Correlated noise")   # 相关噪声
 
     plt.show()
 

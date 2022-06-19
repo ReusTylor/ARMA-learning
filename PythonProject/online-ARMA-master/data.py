@@ -7,8 +7,8 @@ import pandas_datareader as web
 
 
 def gen_dataset1(n_samples=10000):
-    alpha = np.array([0.6, -0.5, 0.4, -0.4, 0.3])
-    beta = np.array([0.3, -0.2])
+    alpha = np.array([0.6, -0.5, 0.4, -0.4, 0.3])  # 创建一个数组
+    beta = np.array([0.3, -0.2])  # 创建一个数组
     a = 5
     b = 2
     sigma = 0.3
@@ -16,7 +16,7 @@ def gen_dataset1(n_samples=10000):
     noises = [0]*b
     arma = [0]*a
     for i in range(n_samples):
-        noise = np.random.normal(0, sigma)
+        noise = np.random.normal(0, sigma)  # 从正态分布中抽取随机样本，分布的均值为0，标准差为sigma
         x = np.sum(arma[:-a-1:-1] * alpha)
         x += np.sum(noises[:-b-1:-1] * beta)
         x += noise
@@ -101,6 +101,7 @@ def gen_dataset4(n_samples=10000):
 
 def gen_temperature(n_samples=10000):
     t = sm.datasets.elnino.load()
+    print(t)
     temps = []
     for year in t.data.tolist():
         temps.extend(year[1:])
